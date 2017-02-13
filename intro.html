@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction &#8212; Nek5000 17.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '17.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="prev" title="Nek5000" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="computational-approach">
+<h2>Computational Approach<a class="headerlink" href="#computational-approach" title="Permalink to this headline">¶</a></h2>
+<p>The spatial discretization is based on the spectral element method (SEM) <a class="reference internal" href="bibliography.html#patera1984" id="id1">[Patera1984]</a>, which is a
+high-order weighted residual technique similar to the finite element method.   In the SEM, the
+solution and data are represented in terms of (N)th-order tensor-product polynomials within each
+of <span class="math">\(E\)</span> deformable hexahedral (brick) elements. Typical discretizations involve
+<span class="math">\(E\)</span>=100&#8211;10,000 elements of order <span class="math">\(N\)</span>=8&#8211;16 (corresponding to 512&#8211;4096 points per
+element).  Vectorization and cache efficiency derive from the local lexicographical ordering within
+each macro-element and from the fact that the action of discrete operators, which nominally have
+<span class="math">\(O(EN^6)\)</span> nonzeros, can be evaluated in only <span class="math">\(O(EN^4)\)</span> work and <span class="math">\(O(EN^3)\)</span> storage
+through the use of tensor-product-sum factorization (sao80).   The SEM exhibits very little
+numerical dispersion and dissipation, which can be important, for example, in stability
+calculations, for long time integrations, and for high Reynolds number flows. We refer to
+<a class="reference internal" href="bibliography.html#denville2002" id="id2">[Denville2002]</a> for more details.</p>
+<p>The code Nek5000 is based on the following design principles:</p>
+<ul class="simple">
+<li>Accessible both to beginners and experts alike.</li>
+<li>Accessible interface via Fortran to include user-defined modules.</li>
+<li>The code intrinsics can be accessed and modified via the user files for more experienced developers</li>
+<li>portability.</li>
+<li>Minimal use of external libraries to assure fast compile times.</li>
+<li>Fast matrix free operator evaluation with minimal storage.</li>
+<li>Matrix operations are implemented in assembler code <span class="math">\(M \times M\)</span> routines to speed up computations.</li>
+<li>The parallelism is &#8220;under the hood&#8221;, demanding from the user only care in handling local versus global operations and array sizes.</li>
+<li>By testing at the beginning of each run which one of the three readily implemented parallel-algorithms behaves optimally, the parallelism of Nek5000 can be automatically tuned to each machine.</li>
+<li>Direct access to parameters at runtime.</li>
+<li>Geometry and boundary conditions are exposed to the user via the .rea file.</li>
+<li>Handling complex geometries that can be imported from external codes .</li>
+</ul>
+</div>
+<div class="section" id="incompressible-navier-stokes-equations">
+<h2>Incompressible Navier-Stokes Equations<a class="headerlink" href="#incompressible-navier-stokes-equations" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="non-dimensional-navier-stokes">
+<h2>Non-Dimensional Navier-Stokes<a class="headerlink" href="#non-dimensional-navier-stokes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="energy-equation">
+<h2>Energy Equation<a class="headerlink" href="#energy-equation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="non-dimensional-energy-passive-scalar-equation">
+<h2>Non-Dimensional Energy / Passive Scalar Equation<a class="headerlink" href="#non-dimensional-energy-passive-scalar-equation" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="passive-scalars">
+<h2>Passive Scalars<a class="headerlink" href="#passive-scalars" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="unsteady-stokes">
+<h2>Unsteady Stokes<a class="headerlink" href="#unsteady-stokes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="steady-stokes">
+<h2>Steady Stokes<a class="headerlink" href="#steady-stokes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="linearized-equations">
+<h2>Linearized Equations<a class="headerlink" href="#linearized-equations" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="steady-conduction">
+<h2>Steady Conduction<a class="headerlink" href="#steady-conduction" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="low-mach-navier-stokes">
+<h2>Low-Mach Navier-Stokes<a class="headerlink" href="#low-mach-navier-stokes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="incompressible-mhd-equations">
+<h2>Incompressible MHD Equations<a class="headerlink" href="#incompressible-mhd-equations" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="adpative-lagrangian-eulerian-ale">
+<h2>Adpative Lagrangian-Eulerian (ALE)<a class="headerlink" href="#adpative-lagrangian-eulerian-ale" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#computational-approach">Computational Approach</a></li>
+<li><a class="reference internal" href="#incompressible-navier-stokes-equations">Incompressible Navier-Stokes Equations</a></li>
+<li><a class="reference internal" href="#non-dimensional-navier-stokes">Non-Dimensional Navier-Stokes</a></li>
+<li><a class="reference internal" href="#energy-equation">Energy Equation</a></li>
+<li><a class="reference internal" href="#non-dimensional-energy-passive-scalar-equation">Non-Dimensional Energy / Passive Scalar Equation</a></li>
+<li><a class="reference internal" href="#passive-scalars">Passive Scalars</a></li>
+<li><a class="reference internal" href="#unsteady-stokes">Unsteady Stokes</a></li>
+<li><a class="reference internal" href="#steady-stokes">Steady Stokes</a></li>
+<li><a class="reference internal" href="#linearized-equations">Linearized Equations</a></li>
+<li><a class="reference internal" href="#steady-conduction">Steady Conduction</a></li>
+<li><a class="reference internal" href="#low-mach-navier-stokes">Low-Mach Navier-Stokes</a></li>
+<li><a class="reference internal" href="#incompressible-mhd-equations">Incompressible MHD Equations</a></li>
+<li><a class="reference internal" href="#adpative-lagrangian-eulerian-ale">Adpative Lagrangian-Eulerian (ALE)</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Nek5000</a></li>
+      <li>Next: <a href="quickstart.html" title="next chapter">Quickstart</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Paul Fischer, James Lottes,  Stefan Kerkemeier, Oana Marin, Katherine Heisey, Aleks Obabko, Elia Merzari, Yulia Peet, Ronald Rahaman.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
