@@ -45,9 +45,45 @@
           <div class="body" role="main">
             
   <div class="section" id="user-files">
-<h1>User Files<a class="headerlink" href="#user-files" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>User Files<a class="headerlink" href="#user-files" title="Permalink to this headline">¶</a></h1>
+<p>Each simulation is defined by three files: the .rea file, the .usr file, and the SIZE file.  In
+addition, there is a derived .map file that is generated from the .rea file by running <em>genmap</em>,
+which will determine how the elements will be split across processors in the case of a parallel
+run.  SIZE controls (at compile time) the polynomial degree used in the simulation, as well as the
+space dimension <span class="math">\(d=2\)</span> or <span class="math">\(3\)</span>.</p>
+<p>The SESSION.NAME file provides the name and path of the .rea file and the path to it.  It does not
+however need to correspond to a .usr file of an identical name. This allows for different test
+cases (.usr files) that use the same geometry and boundary conditions (.rea files).</p>
+<p>This chapter provides an introduction to the basic files required to set up a Nek5000 simulation.</p>
+<div class="section" id="session-file">
+<span id="user-files-session"></span><h2>SESSION File<a class="headerlink" href="#session-file" title="Permalink to this headline">¶</a></h2>
+<p>To run NEK5000, each simulation must have a SESSION.NAME file. This file is read in by the code and
+gives the path to the relevant files describing the structure and parameters of the simulation. The
+SESSION.NAME file is a file that contains the name of the simulation and the full path to
+supporting files. For example, to run the eddy example from the repository, the SESSION.NAME file
+would look like:</p>
+<blockquote>
+<div>eddy_uv
+/home/user_name/Nek5000/short_tests/eddy/</div></blockquote>
+</div>
 <div class="section" id="case-setup-file-usr">
-<h2>Case Setup File (.usr)<a class="headerlink" href="#case-setup-file-usr" title="Permalink to this headline">¶</a></h2>
+<span id="user-files-usr"></span><h2>Case Setup File (.usr)<a class="headerlink" href="#case-setup-file-usr" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="contents-of-usr-file">
+<h3>Contents of .usr File<a class="headerlink" href="#contents-of-usr-file" title="Permalink to this headline">¶</a></h3>
+<p>The most important interface to Nek5000 is the set of Fortran subroutines that are contained in the
+<em>.usr</em> file.  This file allows direct access to all runtime variables.  Here, the user may
+specify spatially varying properties (e.g., viscosity), volumetric heating sources, body forces,
+and so forth.  One can also specify arbitrary initial and boundary conditions through the routines
+<code class="docutils literal"><span class="pre">useric</span></code> and <code class="docutils literal"><span class="pre">userbc</span></code>.  The routine <code class="docutils literal"><span class="pre">userchk</span></code> allows the user to interrogate the
+solution at the end of each timestep for diagnostic purposes.   The <em>.usr</em> files provided in
+the <em>Nek5000/short_tests/</em> directory illustrate several of the more common analysis tools.  For
+instance, there are utilities for computing the time average of <span class="math">\(u\)</span>, <span class="math">\(u^2\)</span>, etc. so that one
+can analyze mean and rms distributions with the postprocessor.  There are routines for computing
+the vorticity or the scalar <span class="math">\(\lambda_2\)</span> for vortex identification, and so forth.</p>
+</div>
+<div class="section" id="routines-in-usr-file">
+<h3>Routines in .usr File<a class="headerlink" href="#routines-in-usr-file" title="Permalink to this headline">¶</a></h3>
+</div>
 </div>
 <div class="section" id="problem-size-file-size">
 <h2>Problem-Size File (SIZE)<a class="headerlink" href="#problem-size-file-size" title="Permalink to this headline">¶</a></h2>
@@ -69,7 +105,12 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">User Files</a><ul>
-<li><a class="reference internal" href="#case-setup-file-usr">Case Setup File (.usr)</a></li>
+<li><a class="reference internal" href="#session-file">SESSION File</a></li>
+<li><a class="reference internal" href="#case-setup-file-usr">Case Setup File (.usr)</a><ul>
+<li><a class="reference internal" href="#contents-of-usr-file">Contents of .usr File</a></li>
+<li><a class="reference internal" href="#routines-in-usr-file">Routines in .usr File</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#problem-size-file-size">Problem-Size File (SIZE)</a></li>
 <li><a class="reference internal" href="#geometry-and-parameters-file-rea">Geometry and Parameters File (.rea)</a></li>
 <li><a class="reference internal" href="#data-layout">Data Layout</a></li>

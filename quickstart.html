@@ -45,15 +45,117 @@
           <div class="body" role="main">
             
   <div class="section" id="quickstart">
-<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<p>This chapter provides a quick overview to using Nek5000 for some basic flow problems distributed
+with Nek5000.</p>
+<p>Nek5000 runs under UNIX or any UNIX-like OS such as Linux, Mac OS/X, AIX, BG, Cray etc.  The source
+is maintained in a legacy SVN repository (last updated June 2, 2016) and up-to-date Git
+repositories.  Both repositories are available for download, but we recommended that new users work
+with the Git repositories.</p>
 <div class="section" id="the-git-repositories">
-<h2>The Git Repositories<a class="headerlink" href="#the-git-repositories" title="Permalink to this headline">¶</a></h2>
+<span id="quickstart-git"></span><h2>The Git Repositories<a class="headerlink" href="#the-git-repositories" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="downloading-the-source-code">
+<span id="quickstart-git-source"></span><h3>Downloading the Source Code<a class="headerlink" href="#downloading-the-source-code" title="Permalink to this headline">¶</a></h3>
+<p>The Nek5000 source code is hosted on GitHub at <a class="reference external" href="https://github.com/Nek5000/Nek5000">https://github.com/Nek5000/Nek5000</a>.  You can also
+download the source code as a <a class="reference external" href="https://github.com/Nek5000/Nek5000/archive/master.zip">.zip archive</a> or a <a class="reference external" href="https://github.com/Nek5000/Nek5000/archive/master.tar.gz">.tar.gz archive</a>.  You can also download a working copy
+of the repository itself.  The following commands will clone the repository in a directory named
+<em>$HOME/Nek5000</em> (where <em>$HOME</em> denotes your home directory):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+git clone https://github.com/Nek5000/Nek5000.git -b master
+</pre></div>
+</div>
+<p>You can also clone the repository in any directory of your choice:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/my-repos/
+git clone https://github.com/Nek5000/Nek5000.git -b master
+</pre></div>
+</div>
+</div>
+<div class="section" id="downloading-the-example-problems">
+<span id="quickstart-git-examples"></span><h3>Downloading the Example Problems<a class="headerlink" href="#downloading-the-example-problems" title="Permalink to this headline">¶</a></h3>
+<p>The Nek5000 example problems are hosted in a second repository on GitHub,
+<a class="reference external" href="https://github.com/Nek5000/NekExamples">https://github.com/Nek5000/NekExamples</a>.  Likewise, you can download the examples as a <a class="reference external" href="https://github.com/Nek5000/NekExample/archive/master.zip">.zip archive</a>, a <a class="reference external" href="https://github.com/Nek5000/NekExamples/archive/master.tar.gz">.tar.gz archive</a>.  If you&#8217;d like to use Git, you can
+download a working copy of the repository to your home directory:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+git clone https://github.com/Nek5000/NekExamples.git -b master
+</pre></div>
+</div>
+<p>or any directory of your choice:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/my-repos/
+git clone https://github.com/Nek5000/Nek5000.git -b master
+</pre></div>
+</div>
+</div>
+<div class="section" id="tools-and-scripts">
+<span id="quickstart-git-tools"></span><h3>Tools and Scripts<a class="headerlink" href="#tools-and-scripts" title="Permalink to this headline">¶</a></h3>
+<p>The <em>Nek5000/tools</em> directory contains programs for pre- and post-processing tasks, such as
+generating meshes from geometry descriptions.  The following commands will build the tools in
+<em>Nek5000/bin</em>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> Nek5000/tools
+./maketools all
+</pre></div>
+</div>
+<p>By default, the <em>maketools</em> script will use gfortran and gcc as the Fortran and C compilers; you
+can specify a different set of compilers by editing <em>maketools</em>.  You can also build the tools
+in another directory of your choice by providing a second argument to <em>maketools</em>; for example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> Nek5000/tools
+./maketools all ~/my-tools-bin/
+</pre></div>
+</div>
+<p>Besides the compiled tools, there are several convenience scripts in <em>Nek5000/bin</em> that allow you
+to easily set up and execute runs of Nek5000.  These scripts are executable as-is and do not need
+to be compiled.</p>
+<p>We recommend that you add <em>Nek5000/bin</em> to the <em>$PATH</em> variable in your shell&#8217;s environment.  This
+will allow you execute the tools and scripts without typing the full path to the executables.  For
+example, In the bash shell, if you have cloned Nek5000 in <em>$HOME/Nek5000</em> and compiled tools
+in <em>$HOME/Nek5000/bin</em>, you can edit your executable path with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/Nek5000/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>In the following examples, we will assume that the tools and scripts have been added to <em>$PATH</em>.</p>
+</div>
 </div>
 <div class="section" id="the-svn-repository">
-<h2>The SVN Repository<a class="headerlink" href="#the-svn-repository" title="Permalink to this headline">¶</a></h2>
+<span id="quickstart-svn"></span><h2>The SVN Repository<a class="headerlink" href="#the-svn-repository" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="downloading-the-source-code-and-examples">
+<span id="quickstart-svn-source"></span><h3>Downloading the Source Code and Examples<a class="headerlink" href="#downloading-the-source-code-and-examples" title="Permalink to this headline">¶</a></h3>
+<p>The SVN repository can be downloaded with the following commands:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+svn co https://svn.mcs.anl.gov/repos/nek5 nek5_svn
+</pre></div>
+</div>
+<p>This will create a directoy named <em>nek5_svn</em> in your home directory.  The example problems are
+included in the same SVN repo and do not need to be downloaded separately.</p>
+</div>
+<div class="section" id="id4">
+<h3>Tools and Scripts<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>The <em>nek5_svn/trunk/tools</em> directory contains programs for pre- and post-processing tasks, such as
+generating meshes from geometry descriptions.  The following mands will build the tools in
+<em>$HOME/bin</em>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">cd</span> <span class="nv">$HOME</span>/nek5_svn/trunk/tools
+./maketools all
+</pre></div>
+</div>
+<p>By default, the <em>maketools</em> script will use gfortran and gcc as the
+Fortran and C compilers; you can specify a different set of compilers by
+editing <em>maketools</em>.</p>
+<p>Besides the compiled tools, there are several convenience scripts in <em>nek5_svn/trunk/tools/scripts</em>
+that allow you to easily set up and execute runs of Nek5000.  These scripts are executable as-is
+and do not need to be compiled.</p>
+<p>We recommend that you append the paths to the tools and scripts to the <em>$PATH</em> variable in your
+shell&#8217;s environment.  This will allow you execute the tools and scripts without typing the full
+path to the executables.  In the bash shell, you can edit your executable path with:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/bin:</span><span class="nv">$HOME</span><span class="s2">/nek5_svn/trunk/tools/scripts:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>In the following examples, we will assume that the tools and scripts have been added to your
+<em>$PATH</em>.</p>
+</div>
 </div>
 <div class="section" id="a-worked-example">
-<h2>A Worked Example<a class="headerlink" href="#a-worked-example" title="Permalink to this headline">¶</a></h2>
+<span id="quickstart-worked-ex"></span><h2>A Worked Example<a class="headerlink" href="#a-worked-example" title="Permalink to this headline">¶</a></h2>
+<p>As a first example, we consider the eddy problem pres
+.
+To get started, execute the following commands for the Git repositories:</p>
 <div class="section" id="viewing-the-first-2d-example">
 <h3>Viewing the First 2D Example<a class="headerlink" href="#viewing-the-first-2d-example" title="Permalink to this headline">¶</a></h3>
 </div>
@@ -72,8 +174,17 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Quickstart</a><ul>
-<li><a class="reference internal" href="#the-git-repositories">The Git Repositories</a></li>
-<li><a class="reference internal" href="#the-svn-repository">The SVN Repository</a></li>
+<li><a class="reference internal" href="#the-git-repositories">The Git Repositories</a><ul>
+<li><a class="reference internal" href="#downloading-the-source-code">Downloading the Source Code</a></li>
+<li><a class="reference internal" href="#downloading-the-example-problems">Downloading the Example Problems</a></li>
+<li><a class="reference internal" href="#tools-and-scripts">Tools and Scripts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-svn-repository">The SVN Repository</a><ul>
+<li><a class="reference internal" href="#downloading-the-source-code-and-examples">Downloading the Source Code and Examples</a></li>
+<li><a class="reference internal" href="#id4">Tools and Scripts</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#a-worked-example">A Worked Example</a><ul>
 <li><a class="reference internal" href="#viewing-the-first-2d-example">Viewing the First 2D Example</a></li>
 <li><a class="reference internal" href="#modifying-the-first-example">Modifying the First Example</a></li>
