@@ -28,9 +28,9 @@ A .rea file starts with the following three parameters:
 
 The latter specifies how many lines of .rea file, starting from the next line, are the parameters and have to be read by the program.
 
--------------------------------
-List of Parameters in SIZE File
--------------------------------
+....................
+Available Parameters
+....................
 
 .. raw:: html
 
@@ -342,6 +342,235 @@ List of Parameters in SIZE File
 
 **P118  NELZ** number of elements in z for FTP
 
+..........................
+Available Logical Switches
+..........................
+
+This part of .rea file starts with such a line::
+
+   n   LOGICAL SWITCHES FOLLOW
+
+where :math:`n` is the number of logical switches which is set in the following lines.
+
+................
+Logical switches
+................
+
+Note that by default all logical switches are set to false.
+
+**IFFLOW** solve for fluid (velocity, pressure).
+
+**IFHEAT** solve for heat (temperature and/or scalars).
+
+**IFTRAN** solve transient equations (otherwise, solve the steady Stokes flow).
+
+**IFADVC** specify the fields with convection.
+
+**IFTMSH** specify the field(s) defined on T mesh  (first field is the ALE mesh).
+
+**IFAXIS** axisymmetric formulation.
+
+**IFSTRS** use stress formulation in the incompressible case.
+
+**IFLOMACH** use low Mach number compressible flow.
+
+**IFMGRID** moving grid (for free surface flow).
+
+**IFMVBD** moving boundary (for free surface flow).
+
+**IFCHAR** use characteristics for convection operator.
+
+**IFSYNC** use mpi barriers to provide better timing information.
+
+**IFUSERVP** user-defined properties (e.g., :math:`\mu`, :math:`\rho` varying with space and time.
+
+-------------------------------
+List of Parameters in SIZE File
+-------------------------------
+
+**ldim**: number of spatial dimensions (2 or 3). 
+
+**lx1, ly1, lz1**: number of (GLL) points in the :math:`x`, :math:`y` and :math:`z` directions, respectively, within each element of mesh1 (velocity) which is equal to the (polynomial order:math:`+1`) by definition. :math:`ly1` is usually the same as :math:`lx1` and for 2D cases :math:`lz1=1`.
+(is :math:`lx1 \neq ly1` supported?)
+(:math:`lx1` recomeneded odd for better performance}
+
+**lx2, ly2, lz2**: number of (GLL) points in the :math:`x`, :math:`y` and :math:`z` directions, respectively, within each element of mesh2 (pressure). Use :math:`lx2=lx1` for PN/PN formulation or :math:`lx2=lx1-2` for PN/PN-2 formulation.
+
+**lx3, ly3, lz3**: number of (GLL) points in the :math:`x`, :math:`y` and :math:`z` directions, respectively, within each element of mesh3.
+(mesh3 is rarely used)
+
+**lxd, lyd, lzd**: number of points for over integration (dealiasing), use three half rule e.g. for :math:`lx1=8` use :math:`lxd=12`.
+
+**lelx, lely, lelz**: maximum number of elements per rank for global FDM (Fast Diagonalization Method) solver.
+
+**ldimt**:  maximum number of T-array fields (temperature + additional scalars).
+
+**lp**: maximum number of ranks.
+
+**lelg**: maximum (global) number of elements (it is usually set more than the # of elements existing in the mesh, for making maximum use of memory is can be set to the exact number of mesh elements).
+
+**lelt**: maximum number of local elements for T-mesh (per rank, :math:`lelt \geq lelg/np +1`).
+
+**lelv**: maximum number of local elements for V-mesh (:math:`lelv = lelt`).
+
+**lpelv,lpelt,lpert**: Number of elements of the perturbation field, number of perturbation fields
+
+**lpx1, lpy1, lpz1**: Number of point in :math:`x`, :math:`y`, :math:`z` direction of perturbation field within each element of mesh1
+
+**lbelv, lbelt**: Total Number of elements of the B-field (MHD)
+
+**lbx1, lby1, lbz1**: Number of point in :math:`x`, :math:`y`, :math:`z` direction of B-field within each element of mesh1
+
+**lbx2, lby2, lbz2**: Number of point in :math:`x`, :math:`y`, :math:`z` direction of B-field within each element of mesh2
+
+**lx1m, ly1m, lz1m**: when the mesh is a moving type :math:`lx1m=lx1`, otherwise it is set to 1.
+
+**lxz**: LXZ = LX1*LZ1::
+    
+    connect1.f:      common /scruz/  snx(lxz) , sny(lxz) , snz(lxz) ,  efc(lxz)
+
+**lorder**: maximum time integration order (2 or 3).
+
+**maxobj**: maximum number of objects. :red:`zero if not using objects?`
+
+**maxmbr**: maximum number of members in an object.
+
+**lhis**: maximum number of history points a single rank will read in (NP*LHIS :math:`<` number of points in hpts.in).
+
+**lctmp0**: :red:`NOT IN USE!`::
+
+    drive1.f:c      COMMON /CTMP0/ DUMMY0(LCTMP0)
+
+**lctmp1**:::
+
+    drive1.f:c      COMMON /CTMP1/ DUMMY1(LCTMP1)
+    drive2.f:      COMMON /SCRNS/ WORK(LCTMP1)
+
+**lvec**: :red:`NOT IN USE!`
+
+**mxprev**: maximum number of history entries for residual projection (recommended value: 20).
+
+**lgmres**: dimension of Krylov subspace in GMRES (recommended value: 40).
+
+**lmvec**: :red:`NOT IN USE !`
+
+**lsvec**: :red:`NOT IN USE!`
+
+**lstore**: :red:`NOT IN USE!`
+
+**maxmor**: :math:`=lelt`
+
+**lzl**: for 2D cases :math:`lzl=1` and for 3D cases :mathL`lzl=3` (computed automatically).
+
+The following parameters are deprecated and were subsequently removed in newer versions.
+
+**LELGEC**: LELGEC = 1
+
+**LXYZ2**: LXYZ2 = 1
+
+**LXZ21**: LXZ21 = 1
+
+**LMAXV**: LMAXV = LX1*LY1*LZ1*LELV
+
+**LMAXT**: LMAXT = LX1*LY1*LZ1*LELT
+
+**LMAXP**: LMAXP = LX1*LY1*LZ1*LELV
+
 --------------------
 The .fld File Format
 --------------------
+
+The fld file format is used to write and read data both in serial and parallel
+in Nek5000. This section describes the format and should allow third party tool
+developers to implement pre and postprocessing tools.
+
+The file is composed of:
+
+  - the *header* in ASCII format,
+  - mesh data, including the geometry, saved unrolled as scalar vector
+    fields
+
+We will go through each of these categories and give a description of its
+composition.
+
+......
+Header
+......
+
+The header provides structural information about the stored data that is needed
+to parse it correctly. The header is composed of 11 values in ASCII format. It
+has a fixed size of 132 bytes and starts with the string ``#std``. All
+header entries are padded to the right. After the header with 132 bytes, 4 bytes
+follow that determine the endianess of the binary file.  It is the binary
+representation of the number $6.54321$ either in little or big endian.
+
+.. table::
+
+   +-------+---------+-------------+-----------------------------------------------+
+   | Entry | Padding |  Name       | Short Description                             |
+   +=======+=========+=============+===============================================+
+   | 1     | 2       | ``wdsizo``  | sets the precision to 4 (float) or 8 (double) |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 2     | 3       | ``nx``      | number of coordinates in x direction          |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 2     | 3       | ``ny``      | number of coordinates in y direction          |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 2     | 3       | ``nz``      | number of coordinates in z direction          |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 5     | 11      | ``nelo``    | number of elements                            |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 6     | 11      | ``nelgt``   | :red:`----`                                   |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 7     | 21      | ``time``    | time stamp                                    |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 8     | 10      | ``iostep``  | time step                                     |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 9     | 7       | ``fid0``    | :red:`field id`                               |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 10    | 7       | ``nfileoo`` | :red:`number of files`                        |
+   +-------+---------+-------------+-----------------------------------------------+
+   | 11    | 4       | ``rdcode``  | Fields written                                |
+   +-------+---------+-------------+-----------------------------------------------+
+
+Example of a header:::
+
+    #std 4  6  6  1         36         36  0.1000000000000E+03     10000     0      1 XUP                                              úaÑ@
+
+``wdsize`` sets the precision of the floating point numbers in the file. This
+is either 4 bytes for floats or 8 bytes for double precision.
+
+``nx``, ``ny`` and ``nz`` set the number of coordinates in  x, y and z
+direction for each element (polynomial order), respectively. ``nelo`` sets
+the number of total elements on the mesh.
+
+``time`` is the simulation time while ``iostep`` is the time step when the file was written.
+
+``rdcode`` determines which fields are contained in the file:
+
+  - X: Geometry
+  - U: Velocity
+  - P: Pressure
+  - T: Temperature
+  - S: Passive scalar
+
+....
+Data
+....
+
+The data field begins after the first 136 bytes of the file. The values are
+stored unrolled for each element and for each direction.
+Example code for reading the geometry field in python:
+
+.. code-block:: python
+
+    for iel in range(nelo):
+        x=ifilebuf.read(nxyzo8*wdsizo)
+        xup=numpy.array(struct.unpack(nxyzo8*c,x),dtype=c)
+        xfield[iel,:]=xup
+        y=ifilebuf.read(nxyzo8*wdsizo)
+        yup=numpy.array(struct.unpack(nxyzo8*c,y),dtype=c)
+        yfield[iel,:]=yup
+        if if3d:
+            z=ifilebuf.read(nxyzo8*wdsizo)
+            zup=numpy.array(struct.unpack(nxyzo8*c,z),dtype=c)
+            zfield[iel,:]=zup
