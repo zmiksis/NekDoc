@@ -120,50 +120,49 @@ An Example of Specifying Surface Normals in the .usr File
 
 .. code-block:: fortran
 
-   c-----------------------------------------------------------------------
-         subroutine userbc (ix,iy,iz,iside,eg)
-         include 'SIZE'
-         include 'TOTAL'
-         include 'NEKUSE'
+   subroutine userbc (ix,iy,iz,iside,eg)
+   include 'SIZE'
+   include 'TOTAL'
+   include 'NEKUSE'
 
-         integer e,eg,f
-         real snx,sny,snz   ! surface normals
+   integer e,eg,f
+   real snx,sny,snz   ! surface normals
 
-         f = eface1(iside)
-         e = gllel (eg)
+   f = eface1(iside)
+   e = gllel (eg)
 
-         if (f.eq.1.or.f.eq.2) then      ! "r face"
-            snx = unx(iy,iz,iside,e)                 ! Note:  iy,iz
-            sny = uny(iy,iz,iside,e)
-            snz = unz(iy,iz,iside,e)
-         else if (f.eq.3.or.f.eq.4)  then ! "s face"
-            snx = unx(ix,iz,iside,e)                 !        ix,iz
-            sny = uny(ix,iz,iside,e)
-            snz = unz(ix,iz,iside,e)
-         else if (f.eq.5.or.f.eq.6)  then ! "t face"
-            snx = unx(ix,iy,iside,e)                 !        ix,iy
-            sny = uny(ix,iy,iside,e)
-            snz = unz(ix,iy,iside,e)
-         end if
+   if (f.eq.1.or.f.eq.2) then      ! "r face"
+      snx = unx(iy,iz,iside,e)                 ! Note:  iy,iz
+      sny = uny(iy,iz,iside,e)
+      snz = unz(iy,iz,iside,e)
+   else if (f.eq.3.or.f.eq.4)  then ! "s face"
+      snx = unx(ix,iz,iside,e)                 !        ix,iz
+      sny = uny(ix,iz,iside,e)
+      snz = unz(ix,iz,iside,e)
+   else if (f.eq.5.or.f.eq.6)  then ! "t face"
+      snx = unx(ix,iy,iside,e)                 !        ix,iy
+      sny = uny(ix,iy,iside,e)
+      snz = unz(ix,iy,iside,e)
+   end if
 
-         ux=0.0
-         uy=0.0
-         uz=0.0
-         temp=0.0
+   ux=0.0
+   uy=0.0
+   uz=0.0
+   temp=0.0
 
-         return
-         end
+   return
+   end
 
 This example will load a list of field files (filenames are read from a file) into the solver using the {\tt load\_fld()} function. After the data is loaded, the user is free to compute other postprocessing quantities. At the end the results are dumped onto a regular (uniform) mesh by a subsequent call to prepost().
 
 Note: The regular grid data (field files) cannot be used as a restart file (uniform->GLL interpolation is unstable)!
 
-.. code-block:: fortranfixed
+.. code-block:: fortran
 
-   SUBROUTINE USERCHK
-   INCLUDE 'SIZE'
-   INCLUDE 'TOTAL'
-   INCLUDE 'RESTART'
+   subroutine userchk
+   include 'SIZE'
+   include 'TOTAL'
+   include 'RESTART'
 
    character*80 filename(9999)
 
@@ -183,12 +182,12 @@ Note: The regular grid data (field files) cannot be used as a restart file (unif
    call bcast(filename,nfiles*80)
 
    do i = 1,nfiles
-      call load\_ fld(filename(i))
+      call load_fld(filename(i))
 
       ! do something
       ! note: make sure you save the result into arrays which are
       !       dumped by prepost() e.g. T(nx1,ny1,nz1,nelt,ldimt)
-      ...
+      ! ...
 
       ! dump results into file
       call prepost(.true.,'his')
@@ -229,7 +228,7 @@ To interpolate an existing field file (e.g. base.fld) onto a new mesh do the fol
 - run nek using the new geometry (e.g. new\_geom.f0000)
 - run nek using the old geometry and add this code snipplet to userchk()
 
-  .. code-block:: none
+  .. code-block:: fortran
 
      character*132  newfld, oldfld, newgfld
      data newfld, oldfld, newgfld /'new0.f0001','base.fld','new\_geom.f0000'/
@@ -253,85 +252,85 @@ LOOP
 
 END LOOP
 
-.. code-block:: none
+.. code-block:: fortranfixed
 
-       subroutine particle\_ advect(rtl,mr,npart,dt\_ p)
+         subroutine particle_advect(rtl,mr,npart,dt_p)
    c
    c     Advance particle position in time using 4th-order Adams-Bashford.
    c     U[x\_ i(t)] for a given x\_ i(t) will be evaluated by spectral interpolation.
-   c     Note: The particle timestep dt\_ p has be constant!
+   c     Note: The particle timestep dt_p has be constant!
    c
-        include 'SIZE'
-        include 'TOTAL'
+         include 'SIZE'
+         include 'TOTAL'
 
-        real rtl(mr,1)
+         real rtl(mr,1)
 
-        real vell(ldim,3,lpart)  ! lagged velocities
-        save vell
+         real vell(ldim,3,lpart)  ! lagged velocities
+         save vell
 
-        integer icalld
-        save    icalld
-        data    icalld /0/
+         integer icalld
+         save    icalld
+         data    icalld /0/
 
-        if(npart.gt.lpart) then
-          write(6,*) 'ABORT: npart>lpart - increase lpart in SIZE. ',nid
-          call exitt
-        end if
+         if(npart.gt.lpart) then
+           write(6,*) 'ABORT: npart>lpart - increase lpart in SIZE. ',nid
+           call exitt
+         end if
 
-       ! compute AB coefficients (for constant timestep)
-        if (icalld.eq.0) then
-           call rzero(vell,3*ldim*npart) ! k = 1
-           c0 = 1.
-           c1 = 0.
-           c2 = 0.
-           c3 = 0.
-           icalld = 1
-        else if (icalld.eq.1) then        ! k = 2
-           c0 = 1.5
-           c1 = -.5
-           c2 = 0.
-           c3 = 0.
-           icalld = 2
-        else if (icalld.eq.2) then        ! k = 3
-           c0 = 23.
-           c1 = -16.
-           c2 = 5.
-           c0 = c0/12.
-           c1 = c1/12.
-           c2 = c2/12.
-           c3 = 0.
-           icalld = 3
-        else                             ! k = 4
-           c0 = 55.
-           c1 = -59.
-           c2 = 37.
-           c3 = -9.
-           c0 = c0/24.
-           c1 = c1/24.
-           c2 = c2/24.
-           c3 = c3/24.
-        end if
+         ! compute AB coefficients (for constant timestep)
+         if (icalld.eq.0) then
+            call rzero(vell,3*ldim*npart) ! k = 1
+            c0 = 1.
+            c1 = 0.
+            c2 = 0.
+            c3 = 0.
+            icalld = 1
+         else if (icalld.eq.1) then        ! k = 2
+            c0 = 1.5
+            c1 = -.5
+            c2 = 0.
+            c3 = 0.
+            icalld = 2
+         else if (icalld.eq.2) then        ! k = 3
+            c0 = 23.
+            c1 = -16.
+            c2 = 5.
+            c0 = c0/12.
+            c1 = c1/12.
+            c2 = c2/12.
+            c3 = 0.
+            icalld = 3
+         else                             ! k = 4
+            c0 = 55.
+            c1 = -59.
+            c2 = 37.
+            c3 = -9.
+            c0 = c0/24.
+            c1 = c1/24.
+            c2 = c2/24.
+            c3 = c3/24.
+         end if
 
-        ! compute new position x[t(n+1)]
-        do i=1,npart
-           do k=1,ndim
-              vv = rtl(1+2*ndim+k,i)
-              rtl(1+k,i) =  rtl(1+k,i) +
-       \&                    dt\_p*(
-       \&                    + c0*vv
-       \&                    + c1*vell(k,1,i)
-       \&                    + c2*vell(k,2,i)
-       \&                    + c3*vell(k,3,i)
-       \&                    )
-              ! store velocity history
-              vell(k,3,i) = vell(k,2,i)
-              vell(k,2,i) = vell(k,1,i)
-              vell(k,1,i) = vv
-           end do
-        end do
+         ! compute new position x[t(n+1)]
+         do i=1,npart
+            do k=1,ndim
+               vv = rtl(1+2*ndim+k,i)
+               rtl(1+k,i) =  rtl(1+k,i) +
+        &                    dt_p*(
+        &                    + c0*vv
+        &                    + c1*vell(k,1,i)
+        &                    + c2*vell(k,2,i)
+        &                    + c3*vell(k,3,i)
+        &                    )
+               ! store velocity history
+               vell(k,3,i) = vell(k,2,i)
+               vell(k,2,i) = vell(k,1,i)
+               vell(k,1,i) = vv
+            end do
+         end do
 
-        return
-        end
+         return
+         end
 
 
 
