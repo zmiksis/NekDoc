@@ -253,7 +253,7 @@ LOOP
 
 END LOOP
 
-.. code-block:: fortran
+.. code-block:: none
 
        subroutine particle\_ advect(rtl,mr,npart,dt\_ p)
    c
