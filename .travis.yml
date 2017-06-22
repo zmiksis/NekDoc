@@ -1,7 +1,11 @@
 sudo: required
 
-install:
-  - sudo pip install sphinx
+services:
+  - docker
+
+before_install:
+  - docker pull zmiksis/nekdoc
+  - docker run -it zmiksis/nekdoc
 
 script:
   - make clean
