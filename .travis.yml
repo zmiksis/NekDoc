@@ -8,7 +8,6 @@ before_install:
   - docker run -d nekdoc bash
   - docker ps -a
   - docker run -it nekdoc bash -c "./docker_test"
-  - docker exec ubuntu ls
 
 script:
   - make clean
