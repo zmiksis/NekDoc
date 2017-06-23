@@ -5,7 +5,7 @@ services:
 
 before_install:
   - docker pull ubuntu:latest
-  - docker run --name ubuntu --rm -i -t ubuntu bash
+  - docker run --name ubuntu --rm -i -t -d ubuntu bash
   - docker exec -d ubuntu ls
 
 script:
