@@ -3,7 +3,7 @@ FROM ubuntu:latest
 # SET WORKING DIRECTORY TO /home
 WORKDIR /home
 
-# COPY CURRENT DIRECTORY CONTENTS TO /hom
+# COPY CURRENT DIRECTORY CONTENTS TO /home
 ADD . /home
 
 # INSTALL NECESSARY DEPENDENCIES
@@ -16,4 +16,4 @@ RUN pip install sphinx
 EXPOSE 80
 
 # RUN SPHINX MAKE WHEN CONTAINER LAUNCHES
-CMD ["make html", "make latexpdf"]
+CMD ["./dockertest"]
