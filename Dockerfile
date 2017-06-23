@@ -16,4 +16,4 @@ RUN pip install sphinx
 EXPOSE 80
 
 # RUN SPHINX MAKE WHEN CONTAINER LAUNCHES
-CMD ["./dockertest"]
+CMD ["./docker_test"]
