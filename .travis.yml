@@ -5,7 +5,7 @@ services:
 
 before_install:
   - docker pull ubuntu:latest
-  - docker run -it zmiksis/nekdoc
+  - docker run -it ubuntu:latest
 
 script:
   - make clean
