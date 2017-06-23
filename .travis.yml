@@ -5,11 +5,9 @@ services:
 
 before_install:
   - docker build -t nekdoc .
-  - docker run -p 4000:80 nekdoc
-  - docker pull ubuntu:latest
-  - docker run --name ubuntu --rm -i -t -d ubuntu bash
+  - docker run -d nekdoc bash
   - docker ps -a
-  - docker exec ubuntu make html
+  - docker run -it nekdoc bash -c "./docker_test"
   - docker exec ubuntu ls
 
 script:
