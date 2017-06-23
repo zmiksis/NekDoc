@@ -4,7 +4,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t nekdoc
+  - docker build -t nekdoc .
   - docker run -p 4000:80 nekdoc
   - docker pull ubuntu:latest
   - docker run --name ubuntu --rm -i -t -d ubuntu bash
