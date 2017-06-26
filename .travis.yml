@@ -1,13 +1,13 @@
 sudo: required
 
-services:
-  - docker
-
-before_install:
-  - docker build -t nekdoc .
-  - docker run -d nekdoc bash
-  - docker ps -a
-  - docker run -it --rm --pid=host nekdoc
+install:
+  - sudo pip install sphinx
 
 script:
-  - ./docker_test
+  - make clean
+  - make html > logfile
+  - sed 's/[^0-9]*//g' logfile | tee log2
+  - sed '/^\s*$/d' log2 | tee log3
+  - NUMBER=$(tail -1 log3)
+  - if (( $NUMBER > 3 )); then exit 1; fi
+
