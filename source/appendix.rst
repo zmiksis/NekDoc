@@ -370,6 +370,7 @@ List of Parameters in SIZE File
 
 **lx1, ly1, lz1**: number of (GLL) points in the :math:`x`, :math:`y` and :math:`z` directions, respectively, within each element of mesh1 (velocity) which is equal to the (polynomial order :math:`+1`) by definition. ``ly1`` is usually the same as ``lx1`` and for 2D cases ``lz1=1``.
 (is ``lx1`` :math:`\neq` ``ly1`` supported?)
+
 (``lx1`` recomeneded odd for better performance)
 
 **lx2, ly2, lz2**: number of (GLL) points in the :math:`x`, :math:`y` and :math:`z` directions, respectively, within each element of mesh2 (pressure). Use ``lx2=lx1`` for PN/PN formulation or ``lx2=lx1-2`` for PN/PN-2 formulation.
