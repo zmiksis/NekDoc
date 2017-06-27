@@ -92,43 +92,26 @@ Available configurations options:
 
 .. _tab:bdms:
 
-.. table:: Compiler options
+.. csv-table:: Compiler options
+   :header: name,values,default,description
+   :widths: 12,7,12,20
 
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | name           | values     | default       | description                                                                                 |
-   +================+============+===============+=============================================================================================+
-   | PPLIST         | string     |               | list of pre-processor symbols (BG,MOAB,BLAS_MXM, MPIIO)                                     |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | IFMPI          | true,false | true          | use MPI (needed for a multiprocessor computation)                                           |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | IFAMG_DUMP     | true,false | false         | dump AMG pre-processing files                                                               |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | IFAMG          | true,false | false         | use AMG as coarse grid solver for pressure preconditioner else XXT                          |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | F77            | string     | mandatory     | Fortran compiler (e.g. MPI: mpif77)                                                         |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | CC             | string     | mandatory     | C compiler (e.g. MPI: mpicc)                                                                |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | G              | string     | optional      | optional compilation flags                                                                  |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | OPT_FLAGS_STD7 | string     | optional      | optimization flags for L1,L2,L3                                                             |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | OPT_FLAGS_MAG  | string     | optional      | optimization flags for L4 (highest opt level)                                               |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | SOURCE_ROOT    | string     | mandatory     | path of Nek5000 source                                                                      |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | USR            | string     | optional      | object list of additional files to compile make intructions (``makefile_usr.inc`` required) |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | USR_LFLAGS     | string     | optional      | optional linking flags                                                                      |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | MOAB_DIR       | string     | NEK with MOAB | Path to MOAB directories                                                                    |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | IFVISIT        | true,false | false         | Toggles Visit in situ. See Visit_in_situ for details                                        |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | VISIT_INSTALL  | string     | VISIT in situ | Path to VISIT install path. See Visit_in_situ for details.                                  |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
-   | VISIT_STOP     | true,false | false         | When running VISIT in situ, simulation stops after step 1 to connect VISIT.                 |
-   +----------------+------------+---------------+---------------------------------------------------------------------------------------------+
+   PPLIST, string, , "list of pre-processor symbols (BG,MOAB,BLAS_MXM, MPIIO)"                                     
+   IFMPI, "true, false", true, use MPI (needed for a multiprocessor computation)                                           
+   IFAMG_DUMP, "true, false", false, dump AMG pre-processing files                                                               
+   IFAMG, "true, false", false, use AMG as coarse grid solver for pressure preconditioner else XXT                          
+   F77, string, mandatory, Fortran compiler (e.g. MPI: mpif77)                                                         
+   CC, string, mandatory, C compiler (e.g. MPI: mpicc)                                                               
+   G, string, optional, optional compilation flags                                                                  
+   OPT_FLAGS_STD7, string, optional, "optimization flags for L1,L2,L3"                                                             
+   OPT_FLAGS_MAG, string, optional, optimization flags for L4 (highest opt level)                                               
+   SOURCE_ROOT, string, mandatory, path of Nek5000 source                                                                      
+   USR, string, optional, object list of additional files to compile make intructions (``makefile_usr.inc`` required) 
+   USR_LFLAGS, string, optional, optional linking flags                                                                      
+   MOAB_DIR, string, NEK with MOAB, Path to MOAB directories                                                                    
+   IFVISIT, "true, false", false, Toggles Visit in situ. See Visit_in_situ for details                                        
+   VISIT_INSTALL, string, VISIT in situ, Path to VISIT install path. See Visit_in_situ for details.                                 
+   VISIT_STOP, "true, false", false, "When running VISIT in situ, simulation stops after step 1 to connect VISIT."                 
 
 ...............
 Binary geometry
